@@ -1,16 +1,9 @@
 from copy import deepcopy
-from ctypes import addressof
 import math
-import string
-from turtle import goto
 import cv2
-from cv2 import threshold
 import numpy as np
-from requests import delete
-
 
 def detectLines(gray_img):
-    # Detect lines
     low_threshold = 50
     high_threshold = 150
     edges = cv2.Canny(gray_img, low_threshold, high_threshold)
