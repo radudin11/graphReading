@@ -1,1 +1,0 @@
-# detect (almost) straight lines in an image
