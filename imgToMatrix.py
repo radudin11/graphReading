@@ -8,14 +8,14 @@ def detectLines(gray_img):
     high_threshold = 150
     edges = cv2.Canny(gray_img, low_threshold, high_threshold)
 
-    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 50, minLineLength=50, maxLineGap=10)
+    lines = cv2.HoughLinesP(edges, 1, np.pi/200, 50, minLineLength=30, maxLineGap=40)
 
     return lines
 
 def deleteLines(lines, img):
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 8)
+        cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 7)
 
 def detectCircles(img):
     params = cv2.SimpleBlobDetector_Params()
@@ -88,6 +88,10 @@ def edgesLink(edge1, edge2, threshold):
 def checkSlope(edge1, edge2, threshold):
     x1, y1, x2, y2 = edge1[0]
     x3, y3, x4, y4 = edge2[0]
+    if x1 == x2:
+        x1 += 0.00000001
+    if x3 == x4:
+        x3 += 0.00000001
     slope1 = (y2-y1)/(x2-x1)
     slope2 = (y4-y3)/(x4-x3)
     if abs(slope1 - slope2) < threshold:
@@ -117,33 +121,32 @@ def createMatrix(circles, edges):
                     matrix[i][j] = 1
                     matrix[j][i] = 1
                     break
-                
-
-                        
     return matrix
 
 def main():
-    # Read image
-    im = cv2.imread("images/graphTest.png")
-    gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 
-    # Detect and delete lines
+    inputFile = "images/patrickGraph.png"
+    # Read image
+    im = cv2.imread(inputFile, cv2.IMREAD_GRAYSCALE)
+
+    # Detect lines
     graphLinks = detectLines(im)
 
     # Get array from ndarray
     graphLinks = graphLinks.tolist()
 
+    # Delete lines from image
     deleteLines(graphLinks, im)
 
-    # Show image
-    cv2.imwrite('images/graphTestResult.png', im)
+    # Write image with deleted lines
+    cv2.imwrite('images/patrickGraphTestResult.png', im)
 
     # Detect circles o new image
     circles = detectCircles(im)
 
     # Draw detected circles
     circleImage = deepcopy(im)
-    drawCircles(circles, circleImage, "images/graphTestResult.png")
+    drawCircles(circles, circleImage, "images/patrickGraphtestResult.png")
 
     matrix = createMatrix(circles, graphLinks)
     print(matrix)

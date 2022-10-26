@@ -11,7 +11,7 @@ def deleteLines(edgeLines, img):
 
 
 if __name__ == '__main__':
-    img = cv2.imread('images/graphTest.png')
+    img = cv2.imread('images/patrickGraph.png')
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
     low_threshold = 10
@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     line_img = np.copy(img)*0 # creating a blank to draw lines on
 
-    edgeLines = cv2.HoughLinesP(edges, 1, np.pi/180, 50, minLineLength=50, maxLineGap=10)
+    edgeLines = cv2.HoughLinesP(edges, 1, np.pi/200, 50, minLineLength=50, maxLineGap=40)
 
     # deleteLines(edgeLines, img)
     for line in edgeLines:
@@ -32,6 +32,6 @@ if __name__ == '__main__':
     
 
     cv2.imshow('img', img)
-    cv2.imwrite('images/graphTestResult.png', img)
+    cv2.imwrite('images/patrickGraphTestResult.png', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
